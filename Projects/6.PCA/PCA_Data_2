@@ -1,0 +1,92 @@
+import pandas as pd
+# from google.colab import drive
+df = pd.read_csv("./economic1.csv")
+df
+
+import numpy as np
+
+null_rows = df.isnull().sum()
+print(null_rows)
+
+df = df.drop(['Series_title_2','Series_title_3','Series_title_4', 'Series_title_5'], axis=1)
+df
+
+null_rows = df.isnull().sum()
+print(null_rows)
+print(df)
+
+print("Missing values per column:")
+print(df.isnull().sum())
+
+df = df.dropna()
+
+print("Missing values per column:")
+print(df.isnull().sum())
+df.head()
+df.tail()
+df
+
+from matplotlib import pyplot as plt
+from sklearn.decomposition import PCA
+import seaborn as sns
+
+plt.scatter(df['Period'],df['Data_value'], c='red', s=2)
+plt.xlabel("Time")
+plt.ylabel("Data Values")
+
+X = df.drop('Data_value', axis=1)
+y = df['Data_value']
+X
+# print(X.columns)
+# print(y)
+
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, OneHotEncoder
+
+
+# ---- Step 1: Handle 'Period' column ----
+X[['Year', 'Month']] = X['Period'].astype(str).str.split('.', expand=True).astype(int)
+X.drop(columns=['Period'], inplace=True)
+
+X
+
+
+# ---- Step 3: Normalize numerical variables ----
+from sklearn.preprocessing import StandardScaler
+
+# Separate numerical and categorical features
+num_features = ['Year', 'Month', 'MAGNITUDE']  # Keep them numeric
+cat_features = [col for col in X.columns if col not in num_features]  # The rest
+
+# One-Hot Encode Categorical Features
+X_cat = pd.get_dummies(X[cat_features], drop_first=True)
+
+# Scale Numerical Features
+scaler = StandardScaler()
+X_num = pd.DataFrame(scaler.fit_transform(X[num_features]), columns=num_features)
+
+# Combine them back
+X_final = pd.concat([X_num, X_cat], axis=1)
+
+print(X_final.dtypes)  # Should have scaled numerical + one-hot categorical
+
+
+X
+
+# Convert boolean columns to integers (0/1) for PCA
+X = X.astype(int)
+
+# ---- Final Scaled & Encoded Features ----
+X
+
+from sklearn.decomposition import PCA
+
+# Reduce dimensions before plotting
+pca = PCA(n_components=20)  # Reduce to 20 principal components
+X_pca = pca.fit_transform(X)
+
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=pd.DataFrame(X_pca))
+plt.xticks(rotation=45)
+plt.title("Boxplot of PCA Components")
+plt.show()
