@@ -1,0 +1,3 @@
+[submodule "Projects/9.Agentic_AI/exam3_fastapi"]
+	path = Projects/9.Agentic_AI/exam3_fastapi
+	url = https://github.com/bmcgauley/exam3_fastapi.git
