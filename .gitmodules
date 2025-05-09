@@ -1,3 +1,6 @@
 [submodule "Projects/9.Agentic_AI/exam3_fastapi"]
 	path = Projects/9.Agentic_AI/exam3_fastapi
 	url = https://github.com/bmcgauley/exam3_fastapi.git
+[submodule "Projects/9.Agentic_AI/AI_PROJECT_MANAGEMENT"]
+	path = Projects/9.Agentic_AI/AI_PROJECT_MANAGEMENT
+	url = https://github.com/bmcgauley/AI_PROJECT_MANAGEMENT.git
